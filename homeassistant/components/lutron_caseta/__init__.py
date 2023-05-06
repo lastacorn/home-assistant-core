@@ -14,7 +14,13 @@ from pylutron_caseta.smartbridge import Smartbridge
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.const import ATTR_DEVICE_ID, ATTR_SUGGESTED_AREA, CONF_HOST, Platform
+from homeassistant.const import (
+    ATTR_DEVICE_ID,
+    ATTR_SUGGESTED_AREA,
+    CONF_HOST,
+    CONF_NAME,
+    Platform,
+)
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import device_registry as dr, entity_registry as er
@@ -113,6 +119,7 @@ async def async_setup(hass: HomeAssistant, base_config: ConfigType) -> bool:
                     context={"source": config_entries.SOURCE_IMPORT},
                     # extract the config keys one-by-one just to be explicit
                     data={
+                        CONF_NAME: config[CONF_NAME],
                         CONF_HOST: config[CONF_HOST],
                         CONF_KEYFILE: config[CONF_KEYFILE],
                         CONF_CERTFILE: config[CONF_CERTFILE],

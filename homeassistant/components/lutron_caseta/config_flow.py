@@ -24,13 +24,13 @@ from .const import (
     CONF_CA_CERTS,
     CONF_CERTFILE,
     CONF_KEYFILE,
+    DEFAULT_BRIDGE_TITLE,
     DOMAIN,
     ERROR_CANNOT_CONNECT,
     STEP_IMPORT_FAILED,
 )
 
 HOSTNAME = "hostname"
-
 
 FILE_MAPPING = {
     PAIR_KEY: CONF_KEYFILE,
@@ -39,8 +39,6 @@ FILE_MAPPING = {
 }
 
 _LOGGER = logging.getLogger(__name__)
-
-ENTRY_DEFAULT_TITLE = "Caséta bridge"
 
 DATA_SCHEMA_USER = vol.Schema({vol.Required(CONF_HOST): str})
 TLS_ASSET_TEMPLATE = "lutron_caseta-{}-{}.pem"
@@ -194,7 +192,9 @@ class LutronCasetaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         await self.async_set_unique_id(lutron_id, raise_on_progress=False)
         self._abort_if_unique_id_configured()
-        return self.async_create_entry(title=ENTRY_DEFAULT_TITLE, data=self.data)
+        return self.async_create_entry(
+            title=import_info.get(CONF_NAME, DEFAULT_BRIDGE_TITLE), data=self.data
+        )
 
     async def async_step_import_failed(self, user_input=None):
         """Make failed import surfaced to user."""
